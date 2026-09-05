@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cartografias do Abandono — memória, esquecimento e fotografia no ensino de História</title>
+<meta name="description" content="Catálogo fotográfico e proposição didática sobre memória, esquecimento e patrimônio para o ensino de História no Ensino Médio. Mestrado Profissional em Ensino de História — ProfHistória / UESPI.">
+<meta name="theme-color" content="#17120D">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Cartografias do Abandono">
+<meta property="og:description" content="Memória, esquecimento e fotografia no ensino de História para o Ensino Médio.">
+<meta property="og:image" content="assets/img/capa.jpg">
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="preload" as="image" href="assets/img/capa.webp" type="image/webp">
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/fraunces-normal.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/newsreader-normal.woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/fonts.css">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="is-loading no-js">
+<script>document.body.classList.remove("no-js");</script>
+
+<a class="skip" href="#apresentacao">Pular para o conteúdo</a>
+
+<!-- ══════════ PRELOADER ══════════ -->
+<div class="pre" id="pre" role="status" aria-label="Carregando catálogo">
+  <div class="pre__inner">
+    <svg class="pre__mark" viewBox="0 0 60 60" width="46" height="46" aria-hidden="true">
+      <path d="M9 45 L30 13 L51 45" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+      <circle cx="30" cy="51" r="2.2" fill="currentColor"/>
+    </svg>
+    <p class="pre__label">Cartografias do Abandono</p>
+    <div class="pre__bar"><i id="preBar"></i></div>
+    <p class="pre__num"><span id="preNum">0</span>%</p>
+  </div>
+</div>
+
+<!-- ══════════ CHROME ══════════ -->
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor" id="cursor" aria-hidden="true"><span class="cursor__dot"></span><span class="cursor__ring"></span><span class="cursor__txt"></span></div>
+<div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+
+<header class="nav" id="nav">
+  <a class="nav__brand" href="#top" aria-label="Início">
+    <svg viewBox="0 0 60 60" width="24" height="24" aria-hidden="true"><path d="M9 45 L30 13 L51 45" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/><circle cx="30" cy="51" r="2.8" fill="currentColor"/></svg>
+    <span class="nav__brand-t">Cartografias<em>do Abandono</em></span>
+  </a>
+  <nav class="nav__links" id="navLinks" aria-label="Seções do catálogo">
+    <a href="#apresentacao" data-spy>Apresentação</a>
+    <a href="#serie-01" data-spy>Série 01</a>
+    <a href="#dimensoes" data-spy>Dimensões</a>
+    <a href="#ficha" data-spy>Ficha técnica</a>
+  </nav>
+  <div class="nav__act">
+    <button class="btn btn--ghost" id="openRoteiro" type="button" aria-expanded="false" aria-controls="roteiro">
+      <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M5 4h14v16l-7-3.4L5 20z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg>
+      <span class="btn__t">Roteiro</span><i class="badge" id="roteiroBadge">0/12</i>
+    </button>
+    <a class="btn btn--solid" href="Cartografias-do-Abandono.pdf" download data-magnet data-cursor="baixar">
+      <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M12 3v11m0 0 4.2-4.2M12 14l-4.2-4.2M4.5 19h15" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      <span class="btn__t">Baixar PDF</span>
+    </a>
+    <button class="burger" id="burger" type="button" aria-label="Abrir menu" aria-expanded="false"><i></i><i></i></button>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ══════════ HERO ══════════ -->
+<section class="hero" id="hero">
+  <div class="hero__media lqip lqip--capa" data-parallax="0.3">
+    <picture>
+      <source srcset="assets/img/capa.webp" type="image/webp">
+      <img src="assets/img/capa.jpg" alt="Fachada de casario antigo em ruína: reboco descascado em tons de ocre e creme, portas de madeira desgastadas e fiação exposta." fetchpriority="high" width="1600" height="1066">
+    </picture>
+  </div>
+  <div class="hero__veil" aria-hidden="true"></div>
+  <div class="hero__in">
+    <p class="eyebrow rev" data-d="1">Catálogo fotográfico &amp; proposição didática</p>
+    <h1 class="hero__title">
+      <span class="sr-only">Cartografias do Abandono</span>
+      <span aria-hidden="true" class="mask"><i style="--i:0">Cartografias</i></span>
+      <span aria-hidden="true" class="mask"><i style="--i:1">do Abandono</i></span>
+    </h1>
+    <p class="hero__sub rev" data-d="4">memória, esquecimento e fotografia<br>no ensino de História para o Ensino Médio</p>
+    <div class="hero__meta rev" data-d="5"><span>ProfHistória · UESPI</span><i></i><span>Guaraciaba do Norte — CE</span><i></i><span>2026</span></div>
+  </div>
+  <a class="cue" href="#apresentacao" aria-label="Rolar para a apresentação"><span class="cue__l" aria-hidden="true"></span><span class="cue__t">rolar</span></a>
+  <div class="hero__edge" aria-hidden="true"><span>Capa</span><span>Fotografia · acervo da pesquisa</span></div>
+</section>
+
+<!-- ══════════ APRESENTAÇÃO ══════════ -->
+<section class="sec sec--bone" id="apresentacao" data-spy-target>
+  <div class="wrap">
+    <header class="head">
+      <p class="eyebrow rev">§ 01 — Abertura</p>
+      <h2 class="h2 split">Apresentação</h2>
+    </header>
+    <div class="cols">
+      <div class="cols__main">
+        <p class="lead rev">Prezados professores(as) e pesquisadores(as), apresentamos nessa travessia o nosso catálogo <em>“Cartografias do Abandono: memória, esquecimento e fotografia no ensino de História para o Ensino Médio”</em>, objeto pensado como proposição didática, fruto de uma pesquisa desenvolvida no Mestrado Profissional em Ensino de História, ProfHistória, da Universidade Estadual do Piauí (UESPI), Campus Alexandre Alves de Oliveira, com orientação do Professor Doutor Fernando Bagiotto Botton.</p>
+        <p class="rev">O trabalho compõe a pesquisa intitulada <em>Cartografias do Abandono: estudo sobre o esquecimento como objeto para o Ensino de História</em>, escrita com a intenção de permitir aos professores de História e Ciências Humanas do Ensino Médio trabalharem de forma mais lúdica e criativa conceitos abstratos como esquecimento, temporalidade e memória.</p>
+        <p class="rev">O catálogo, portanto, conecta os aspectos artísticos da fotografia — ao criar uma linguagem imagética sobre os esquecimentos, memórias e patrimônios — com o aprendizado histórico. Assim, possibilita aos professores refletir, a partir dos registros fotográficos, estratégias de ensino e aprendizagem históricas.</p>
+        <p class="rev">As séries fotográficas apresentadas aqui irão narrar os elementos constitutivos da realidade contemporânea, marcada por uma aceleração da memória e dos ritos sociais, tendo a ruína, o descarte e o abandono uma configuração estética que marca não somente aspectos materiais, mas também subjetivos e simbólicos. Nessa jornada, esperamos que a linguagem fotográfica possa estimular o pensamento crítico e criativo das aulas de História.</p>
+      </div>
+      <aside class="side rev">
+        <dl class="facts">
+          <div><dt>Programa</dt><dd>Mestrado Profissional em Ensino de História — ProfHistória</dd></div>
+          <div><dt>Instituição</dt><dd>Universidade Estadual do Piauí (UESPI) — Campus Alexandre Alves de Oliveira</dd></div>
+          <div><dt>Orientação</dt><dd>Prof. Dr. Fernando Bagiotto Botton</dd></div>
+          <div><dt>Destinatários</dt><dd>Professores de História e Ciências Humanas do Ensino Médio</dd></div>
+        </dl>
+        <ul class="chips"><li>esquecimento</li><li>temporalidade</li><li>memória</li><li>patrimônio</li><li>ruína</li></ul>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ DIVISOR — SÉRIE 01 ══════════ -->
+<section class="divider" id="serie-01" data-spy-target>
+  <span class="divider__num" aria-hidden="true">01</span>
+  <div class="wrap divider__in">
+    <p class="eyebrow rev">Série fotográfica</p>
+    <h2 class="h1 split">Casas de farinha<br>e engenhos velhos</h2>
+    <p class="divider__sub rev">cultura material e imaterial e esquecimento</p>
+    <span class="divider__rule rev" aria-hidden="true"></span>
+  </div>
+</section>
+
+<!-- ══════════ PRANCHA 01 ══════════ -->
+<figure class="plate" id="prancha-01">
+  <div class="plate__media lqip lqip--foto-01" data-parallax="0.16" data-zoom="assets/img/foto-01.jpg" data-cap="Prancha 01 · Casa de farinha, Guaraciaba do Norte (CE), março de 2026." data-cursor="ampliar">
+    <picture><source srcset="assets/img/foto-01.webp" type="image/webp">
+    <img src="assets/img/foto-01.jpg" loading="lazy" decoding="async" width="1182" height="788" alt="Casa de farinha de telhado de barro e paredes caiadas, vista ampla, cercada por vegetação e chão de terra batida."></picture>
+  </div>
+  <figcaption class="plate__cap"><b>Prancha 01</b><span>Casa de farinha — Guaraciaba do Norte, Ceará. Registro de março de 2026.</span></figcaption>
+</figure>
+
+<section class="sec sec--ink">
+  <div class="wrap">
+    <blockquote class="pull rev"><p>Antes de saber qualquer coisa sobre este lugar, <em>observe.</em></p></blockquote>
+
+    <div class="ask" data-ask-group="Prancha 01 — primeiro olhar">
+      <p class="ask__lbl rev">Perguntas de partida</p>
+      <ul class="qlist">
+        <li><button class="q" type="button" data-q="q1"><span class="q__n">01</span><span class="q__t">O que você consegue identificar na fotografia?</span><span class="q__mk" aria-hidden="true"></span></button></li>
+        <li><button class="q" type="button" data-q="q2"><span class="q__n">02</span><span class="q__t">Quais elementos da paisagem chamam sua atenção?</span><span class="q__mk" aria-hidden="true"></span></button></li>
+      </ul>
+    </div>
+
+    <div class="prose">
+      <p class="rev">A fotografia registra uma casa de farinha localizada no município de Guaraciaba do Norte, Ceará. Espaços como esse estão relacionados à produção da farinha de mandioca e às práticas, técnicas e relações de trabalho desenvolvidas em torno desse processo. Mais do que uma construção, a casa de farinha pode ser compreendida como um espaço de produção de experiências, saberes e memórias.</p>
+      <p class="rev">A fotografia foi registrada pela tarde, em março de 2026. A ideia foi registrar uma imagem ampla da casa, marcando a sua centralidade naquele espaço. Em gerações anteriores, esse local manifestava um polo acolhedor de sociabilidades e afetos sociais que carregavam simbologias, ritos e memórias sociais fundantes de um pertencimento local.</p>
+    </div>
+
+    <div class="callout rev">
+      <p class="callout__lbl">Desafio</p>
+      <button class="q q--big" type="button" data-q="q3"><span class="q__t">O que uma construção pode nos contar sobre a maneira como uma comunidade vivia e trabalhava?</span><span class="q__mk" aria-hidden="true"></span></button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ PRANCHA 02 — COMPARADOR ══════════ -->
+<section class="sec sec--ink sec--tight">
+  <div class="wrap">
+    <header class="head head--sm">
+      <p class="eyebrow rev">Prancha 02</p>
+      <h3 class="h3 split">Observe novamente, por outro ângulo</h3>
+      <p class="head__sub rev">A construção apresenta marcas materiais que podem provocar perguntas sobre sua trajetória. Arraste para confrontar os dois enquadramentos.</p>
+    </header>
+  </div>
+
+  <div class="cmp wrap wrap--wide rev" id="cmp" data-cursor="arraste">
+    <div class="cmp__frame">
+      <picture class="cmp__a lqip lqip--foto-02"><source srcset="assets/img/foto-02.webp" type="image/webp">
+      <img src="assets/img/foto-02.jpg" loading="lazy" decoding="async" width="1192" height="794" alt="Fachada frontal da casa de farinha: pilar de tijolos aparentes, reboco esfarelado e telhado com telhas de barro remendadas."></picture>
+      <div class="cmp__b" id="cmpB"><picture class="lqip lqip--foto-01"><source srcset="assets/img/foto-01.webp" type="image/webp">
+      <img src="assets/img/foto-01.jpg" loading="lazy" decoding="async" width="1182" height="788" alt="Enquadramento amplo da casa de farinha, mostrando sua posição no terreno."></picture></div>
+      <div class="cmp__bar" id="cmpBar"><button class="cmp__grip" id="cmpGrip" type="button" role="slider" aria-label="Comparar enquadramentos" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" tabindex="0"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M9.5 7 5 12l4.5 5M14.5 7l4.5 5-4.5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+      <span class="cmp__tag cmp__tag--l">enquadramento amplo</span>
+      <span class="cmp__tag cmp__tag--r">detalhe da fachada</span>
+      <button class="cmp__zoom" type="button" data-zoom="assets/img/foto-02.jpg" data-cap="Prancha 02 · Fachada frontal — pilar de tijolos aparentes, reboco esfarelado e telhado remendado." aria-label="Ampliar a Prancha 02">
+        <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M15.8 15.8 20 20M11 8.4v5.2M8.4 11h5.2" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
+        <span>ampliar</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="ask" data-ask-group="Prancha 02 — marcas materiais">
+      <p class="ask__lbl rev">Marcas materiais</p>
+      <ul class="qlist">
+        <li><button class="q" type="button" data-q="q4"><span class="q__n">03</span><span class="q__t">Como a casa foi construída?</span><span class="q__mk" aria-hidden="true"></span></button></li>
+        <li><button class="q" type="button" data-q="q5"><span class="q__n">04</span><span class="q__t">Quais materiais aparecem na construção?</span><span class="q__mk" aria-hidden="true"></span></button></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ TEMPO DO LUGAR ══════════ -->
+<section class="sec sec--bone" id="tempo">
+  <div class="wrap">
+    <header class="head">
+      <p class="eyebrow rev">Eixo temporal</p>
+      <h2 class="h2 split">O Tempo do Lugar</h2>
+      <p class="head__sub rev">A fotografia levanta questionamentos sobre o tempo do lugar — passado, presente e futuro.</p>
+    </header>
+
+    <div class="tl rev" id="tl">
+      <div class="tl__rail" role="tablist" aria-label="Camadas de tempo">
+        <button class="tl__tab is-on" role="tab" aria-selected="true" aria-controls="tp-1" id="tt-1" data-t="1">Passado</button>
+        <button class="tl__tab" role="tab" aria-selected="false" aria-controls="tp-2" id="tt-2" data-t="2" tabindex="-1">Presente</button>
+        <button class="tl__tab" role="tab" aria-selected="false" aria-controls="tp-3" id="tt-3" data-t="3" tabindex="-1">Futuro</button>
+        <span class="tl__ind" id="tlInd" aria-hidden="true"></span>
+      </div>
+      <div class="tl__panes">
+        <div class="tl__pane is-on" role="tabpanel" id="tp-1" aria-labelledby="tt-1">
+          <span class="tl__yr" aria-hidden="true">antes</span>
+          <ul class="qlist qlist--plain">
+            <li><button class="q" type="button" data-q="q6"><span class="q__t">Quem utilizava esse espaço?</span><span class="q__mk" aria-hidden="true"></span></button></li>
+            <li><button class="q" type="button" data-q="q7"><span class="q__t">Como era produzido o alimento?</span><span class="q__mk" aria-hidden="true"></span></button></li>
+            <li><button class="q" type="button" data-q="q8"><span class="q__t">Quais pessoas participavam desse trabalho?</span><span class="q__mk" aria-hidden="true"></span></button></li>
+          </ul>
+        </div>
+        <div class="tl__pane" role="tabpanel" id="tp-2" aria-labelledby="tt-2" hidden>
+          <span class="tl__yr" aria-hidden="true">agora</span>
+          <ul class="qlist qlist--plain">
+            <li><button class="q" type="button" data-q="q9"><span class="q__t">O espaço continua sendo utilizado?</span><span class="q__mk" aria-hidden="true"></span></button></li>
+            <li><button class="q" type="button" data-q="q10"><span class="q__t">Quais mudanças podemos perceber?</span><span class="q__mk" aria-hidden="true"></span></button></li>
+          </ul>
+        </div>
+        <div class="tl__pane" role="tabpanel" id="tp-3" aria-labelledby="tt-3" hidden>
+          <span class="tl__yr" aria-hidden="true">depois</span>
+          <ul class="qlist qlist--plain">
+            <li><button class="q" type="button" data-q="q11"><span class="q__t">O que poderá acontecer com esse lugar se deixar de ser utilizado?</span><span class="q__mk" aria-hidden="true"></span></button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="reflect rev">
+      <p class="reflect__lbl">Reflita</p>
+      <button class="q q--big q--dark" type="button" data-q="q12"><span class="q__t">Quando uma prática deixa de acontecer em determinado lugar, o que acontece com as memórias relacionadas a ela?</span><span class="q__mk" aria-hidden="true"></span></button>
+    </div>
+
+    <div class="prose prose--wide">
+      <p class="rev"><span class="dropcap">P</span>rofessores, vamos pensar sobre a fotografia: primeiro, ela registra um determinado enquadramento, em determinado momento, a partir do olhar de quem fotografa. Por isso, observar uma fotografia historicamente significa perguntar não apenas <em>“o que ela mostra?”</em>, mas também <em>“o que ela não mostra?”</em>, <em>“quem produziu essa imagem?”</em> e <em>“que histórias podemos investigar a partir dela?”</em></p>
+      <p class="rev">Uma casa de farinha pode ser entendida como um <em>lugar de memória</em>, não apenas por sua estrutura física, mas pelas experiências humanas que nela aconteceram. Lugares de memória são elaborações sociais e culturais que carregam uma experiência temporal — ou seja, a relação do lugar com a memória é fruto das escolhas e convenções sociais.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ DÍPTICO 03/04 ══════════ -->
+<section class="sec sec--ink sec--tight" id="diptico">
+  <div class="wrap wrap--wide">
+    <div class="dip">
+      <figure class="dip__i rev" data-zoom="assets/img/foto-03.jpg" data-cap="Prancha 03 · Cascas de laranja postas a secar sob o madeiramento do telhado." data-cursor="ampliar">
+        <picture class="lqip lqip--foto-03"><source srcset="assets/img/foto-03.webp" type="image/webp">
+        <img src="assets/img/foto-03.jpg" loading="lazy" decoding="async" width="762" height="508" alt="Vista de baixo para cima do madeiramento e das telhas, com cascas de laranja penduradas secando em uma vara."></picture>
+        <figcaption><b>Prancha 03</b><span>Cascas de laranja secando sob o telhado — prática de preparo do chá.</span></figcaption>
+      </figure>
+      <figure class="dip__i rev" data-zoom="assets/img/foto-04.jpg" data-cap="Prancha 04 · Interior do engenho: forno, tanques de alvenaria e cana recém-cortada." data-cursor="ampliar">
+        <picture class="lqip lqip--foto-04"><source srcset="assets/img/foto-04.webp" type="image/webp">
+        <img src="assets/img/foto-04.jpg" loading="lazy" decoding="async" width="745" height="497" alt="Interior do engenho com tanques de alvenaria, forno, madeiramento aparente e feixe de cana-de-açúcar no chão."></picture>
+        <figcaption><b>Prancha 04</b><span>Interior do engenho — tanques, forno e cana-de-açúcar recém-cortada.</span></figcaption>
+      </figure>
+    </div>
+  </div>
+  <div class="wrap">
+    <blockquote class="pull pull--lg rev"><p>A fotografia não se configura simplesmente como a fotografia de uma casa de farinha. Torna-se um <em>dispositivo</em> para ensinar o aluno a olhar historicamente para um lugar.</p></blockquote>
+  </div>
+</section>
+
+<!-- ══════════ TRÊS DIMENSÕES ══════════ -->
+<section class="sec sec--bone" id="dimensoes" data-spy-target>
+  <div class="wrap">
+    <header class="head">
+      <p class="eyebrow rev">§ 02 — Chave de leitura</p>
+      <h2 class="h2 split">Três dimensões simultâneas</h2>
+      <p class="head__sub rev">As fotografias da casa de farinha podem ser trabalhadas em três dimensões que operam ao mesmo tempo.</p>
+    </header>
+
+    <div class="dims" id="dims">
+      <article class="dim is-on rev" data-dim="1">
+        <button class="dim__hd" type="button" aria-expanded="true">
+          <span class="dim__n" aria-hidden="true">I</span>
+          <span class="dim__ttl">O Espaço</span>
+          <span class="dim__kw">construção · território · paisagem · materialidade</span>
+          <span class="dim__ic" aria-hidden="true"></span>
+        </button>
+        <div class="dim__bd"><div class="dim__in">
+          <p>Observe a arquitetura formada por colunas, característica de uma paisagem comum no meio rural nordestino. A madeira cerrada denuncia uma mudança da casa ao longo do tempo. A imagem das canas de açúcar revela que o lugar ainda é usado.</p>
+          <p class="dim__ref">↳ ver <button class="lnk" type="button" data-goto="assets/img/foto-04.jpg" data-cap="Prancha 04 · Interior do engenho: forno, tanques de alvenaria e cana recém-cortada.">Prancha 04</button></p>
+        </div></div>
+      </article>
+      <article class="dim rev" data-dim="2">
+        <button class="dim__hd" type="button" aria-expanded="false">
+          <span class="dim__n" aria-hidden="true">II</span>
+          <span class="dim__ttl">O Tempo</span>
+          <span class="dim__kw">permanências · transformações · usos e desusos</span>
+          <span class="dim__ic" aria-hidden="true"></span>
+        </button>
+        <div class="dim__bd"><div class="dim__in">
+          <p>Observe que a estrutura resistiu ao longo dos anos, recebendo modificações. Entretanto, o seu formato original permaneceu.</p>
+          <p class="dim__ref">↳ ver <button class="lnk" type="button" data-goto="assets/img/foto-02.jpg" data-cap="Prancha 02 · Fachada frontal: pilar de tijolos e reboco esfarelado.">Prancha 02</button></p>
+        </div></div>
+      </article>
+      <article class="dim rev" data-dim="3">
+        <button class="dim__hd" type="button" aria-expanded="false">
+          <span class="dim__n" aria-hidden="true">III</span>
+          <span class="dim__ttl">A Memória</span>
+          <span class="dim__kw">trabalho · saberes · experiências · lembranças e esquecimentos</span>
+          <span class="dim__ic" aria-hidden="true"></span>
+        </button>
+        <div class="dim__bd"><div class="dim__in">
+          <p>A segunda foto apresenta uma prática comum: as cascas de laranja como chá. Essa prática carrega uma ancestralidade que conecta o passado histórico brasileiro.</p>
+          <p class="dim__ref">↳ ver <button class="lnk" type="button" data-goto="assets/img/foto-03.jpg" data-cap="Prancha 03 · Cascas de laranja postas a secar sob o madeiramento do telhado.">Prancha 03</button></p>
+        </div></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ FECHAMENTO ══════════ -->
+<section class="close">
+  <div class="close__bg lqip lqip--foto-02" data-parallax="0.2" aria-hidden="true">
+    <picture><source srcset="assets/img/foto-02.webp" type="image/webp"><img src="assets/img/foto-02.jpg" loading="lazy" alt="" width="1192" height="794"></picture>
+  </div>
+  <div class="wrap close__in">
+    <p class="eyebrow rev">Fim da série 01</p>
+    <p class="close__q split">Quando uma prática cessa,<br>o lugar continua falando.</p>
+    <a class="btn btn--big" href="Cartografias-do-Abandono.pdf" download data-magnet data-cursor="baixar">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 3v11m0 0 4.2-4.2M12 14l-4.2-4.2M4.5 19h15" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      <span>Baixar o catálogo completo (PDF)</span>
+    </a>
+    <p class="close__note rev">Arquivo PDF com todas as pranchas, textos e roteiro de aula.</p>
+  </div>
+</section>
+
+<!-- ══════════ FICHA TÉCNICA ══════════ -->
+<section class="sec sec--ink" id="ficha" data-spy-target>
+  <div class="wrap">
+    <header class="head">
+      <p class="eyebrow rev">§ 03 — Créditos</p>
+      <h2 class="h2 split">Ficha técnica</h2>
+    </header>
+    <div class="ficha">
+      <div class="ficha__c rev"><h4>Catálogo</h4><p>Cartografias do Abandono: memória, esquecimento e fotografia no ensino de História para o Ensino Médio</p></div>
+      <div class="ficha__c rev"><h4>Pesquisa</h4><p>Cartografias do Abandono: estudo sobre o esquecimento como objeto para o Ensino de História</p></div>
+      <div class="ficha__c rev"><h4>Programa</h4><p>Mestrado Profissional em Ensino de História — ProfHistória</p></div>
+      <div class="ficha__c rev"><h4>Instituição</h4><p>Universidade Estadual do Piauí (UESPI)<br>Campus Alexandre Alves de Oliveira</p></div>
+      <div class="ficha__c rev"><h4>Orientação</h4><p>Prof. Dr. Fernando Bagiotto Botton</p></div>
+      <div class="ficha__c rev"><h4>Série 01</h4><p>Casas de farinha e engenhos velhos — Guaraciaba do Norte, Ceará. Registros de março de 2026.</p></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <p class="foot__brand">Cartografias<em>do Abandono</em></p>
+    <nav class="foot__nav" aria-label="Rodapé">
+      <a href="#top">Topo</a><a href="#apresentacao">Apresentação</a><a href="#serie-01">Série 01</a><a href="#ficha">Ficha técnica</a>
+      <a href="Cartografias-do-Abandono.pdf" download>PDF</a>
+    </nav>
+    <p class="foot__c">ProfHistória · UESPI — 2026. Todas as fotografias integram o acervo da pesquisa.</p>
+  </div>
+</footer>
+
+<!-- ══════════ ROTEIRO DO PROFESSOR ══════════ -->
+<aside class="roteiro" id="roteiro" aria-hidden="true" aria-label="Roteiro do professor">
+  <div class="roteiro__hd">
+    <div>
+      <p class="eyebrow">Roteiro do professor</p>
+      <h3>Perguntas da série 01</h3>
+    </div>
+    <button class="icb" id="closeRoteiro" type="button" aria-label="Fechar roteiro"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+  </div>
+  <p class="roteiro__hint">Marque as perguntas trabalhadas em aula e anote observações. Tudo fica salvo neste navegador.</p>
+  <div class="roteiro__bd" id="roteiroList"></div>
+  <div class="roteiro__ft">
+    <button class="btn btn--ghost" id="printRoteiro" type="button">Imprimir</button>
+    <button class="btn btn--ghost" id="clearRoteiro" type="button">Limpar</button>
+    <span class="roteiro__cnt" id="roteiroCount">0 de 12</span>
+  </div>
+</aside>
+<div class="scrim" id="scrim" hidden></div>
+
+<!-- ══════════ LIGHTBOX ══════════ -->
+<div class="lb" id="lb" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Visualizador de fotografia">
+  <button class="lb__x icb" id="lbX" type="button" aria-label="Fechar"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+  <button class="lb__nav lb__nav--p icb" id="lbP" type="button" aria-label="Anterior"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <button class="lb__nav lb__nav--n icb" id="lbN" type="button" aria-label="Próxima"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <figure class="lb__fig"><img id="lbImg" src="" alt=""><figcaption id="lbCap"></figcaption></figure>
+  <p class="lb__idx" id="lbIdx"></p>
+</div>
+
+<script src="assets/js/main.js" defer></script>
+</body>
+</html>
