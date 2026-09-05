@@ -233,11 +233,30 @@ const criarContainerVLibras = () => {
   document.body.appendChild(wrap);
 };
 
+/* O plugin não se limita ao container que criamos: ele acrescenta irmãos ao
+   body (o #vlibras-access-wrapper, entre outros). Esconder só o div[vw]
+   deixava o boneco flutuando depois de desligar. Em vez de perseguir os
+   nomes que o plugin usa, registramos o que apareceu no body por causa dele
+   e escondemos exatamente esse conjunto. */
+let bodyAntesDoVLibras = null;
+
+const nosDoVLibras = () => {
+  const nos = [...document.body.children].filter(el =>
+    el.hasAttribute('vw') || el.id === 'vlibras-access-wrapper' ||
+    (bodyAntesDoVLibras && !bodyAntesDoVLibras.has(el)));
+  return nos.filter(el => !el.closest('.a11y') && el.tagName !== 'SCRIPT');
+};
+
+const mostrarLibras = (mostrar) => {
+  nosDoVLibras().forEach(el => { el.style.display = mostrar ? '' : 'none'; });
+};
+
 function toggleLibras(on) {
-  if (!on) { librasNote.hidden = true; return; }
-  if (librasLoaded || librasLoading) return;
+  if (!on) { librasNote.hidden = true; mostrarLibras(false); return; }
+  if (librasLoaded || librasLoading) { mostrarLibras(true); return; }
   librasLoading = true;
   aviso('Carregando o tradutor de Libras do VLibras (gov.br)…');
+  bodyAntesDoVLibras = new Set(document.body.children);
   criarContainerVLibras();
 
   const s = document.createElement('script');
@@ -258,6 +277,7 @@ function toggleLibras(on) {
       if (botao && botao.offsetParent !== null) {
         clearInterval(conferir);
         librasLoaded = true;
+        mostrarLibras(S.libras);          // pode ter sido desligado durante a carga
         aviso('Tradutor de Libras ativo. Use o boneco na lateral da tela.', true);
       } else if (++tentativas > 30) {
         clearInterval(conferir);
@@ -271,6 +291,12 @@ function toggleLibras(on) {
   };
   document.body.appendChild(s);
 }
+
+/* O VLibras monta em etapas e pode inserir nós depois de o usuário já ter
+   desligado o recurso: este observador esconde os retardatários. */
+new MutationObserver(() => {
+  if (!S.libras && bodyAntesDoVLibras) mostrarLibras(false);
+}).observe(document.body, { childList: true });
 
 /* ─────────── LEITURA EM VOZ ALTA ─────────── */
 const synth = window.speechSynthesis;

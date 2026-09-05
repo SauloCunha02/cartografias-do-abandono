@@ -279,7 +279,11 @@ html[class*="cb-"] body>svg.a11y-filters{ filter:none; }
 
 /* ══════════ 16. VLIBRAS ══════════ */
 div[vw]{ z-index:640 !important; }
-html:not(.a-libras) div[vw]{ display:none !important; }
+/* o plugin espalha mais de um elemento pelo body; todos somem juntos */
+html:not(.a-libras) div[vw],
+html:not(.a-libras) #vlibras-access-wrapper,
+html:not(.a-libras) [vw-access-button],
+html:not(.a-libras) [vw-plugin-wrapper]{ display:none !important; }
 .a11y-note{
   margin-top:.6rem; padding:.6rem .7rem; border-radius:2px;
   background:rgba(201,145,63,.1); border:1px solid rgba(201,145,63,.3);
