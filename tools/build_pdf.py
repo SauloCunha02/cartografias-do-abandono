@@ -152,6 +152,7 @@ rule(p, M, 432, 62, OCRE, 0.9)
 box(p, pymupdf.Rect(M, 450, M + 330, 510),
     "memória, esquecimento e fotografia\nno ensino de História para o Ensino Médio",
     "seri", 13, BONE3, lh=1.45)
+p.insert_text((M - 1, 528), "Francisco das Chagas Barroso Uchoa", fontname="ser", fontsize=11.5, color=BONE)
 tracked(p, M, H - 42, "ProfHistória · UESPI    ·    Guaraciaba do Norte — CE    ·    2026", 6.6, ON_INKd, 0.2)
 
 # ═══════════════════════════════════════════════════════════
@@ -434,6 +435,7 @@ rule(p, M, 300, CW, (0.35, 0.30, 0.24), 0.6)
 
 tracked(p, M, 330, "Ficha técnica", 7, OCRE, 0.26)
 items = [("Catálogo", "Cartografias do Abandono: memória, esquecimento e fotografia no ensino de História para o Ensino Médio"),
+         ("Autoria", "Francisco das Chagas Barroso Uchoa"),
          ("Pesquisa", "Cartografias do Abandono: estudo sobre o esquecimento como objeto para o Ensino de História"),
          ("Programa", "Mestrado Profissional em Ensino de História — ProfHistória"),
          ("Instituição", "Universidade Estadual do Piauí (UESPI) — Campus Alexandre Alves de Oliveira"),
@@ -442,11 +444,11 @@ items = [("Catálogo", "Cartografias do Abandono: memória, esquecimento e fotog
 cwf = (CW - 60) / 3
 for i, (k, v) in enumerate(items):
     x = M + (i % 3) * (cwf + 30)
-    y = 356 + (i // 3) * 88
+    y = 356 + (i // 3) * 64
     tracked(p, x, y, k, 6.2, OCRE, 0.2)
-    p.insert_textbox(pymupdf.Rect(x, y + 8, x + cwf, y + 74), v,
+    p.insert_textbox(pymupdf.Rect(x, y + 8, x + cwf, y + 68), v,
                      fontname="ser", fontsize=9, color=BONE3, lineheight=1.5)
-tracked(p, M, H - 28, "ProfHistória · UESPI — 2026.  Todas as fotografias integram o acervo da pesquisa.",
+tracked(p, M, H - 20, "Francisco das Chagas Barroso Uchoa · ProfHistória / UESPI — 2026.  Todas as fotografias integram o acervo da pesquisa.",
         6.2, (0.45, 0.41, 0.35), 0.16)
 
 # ── metadados + gravação ────────────────────────────────────

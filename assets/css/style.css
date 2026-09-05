@@ -499,10 +499,15 @@ em{ font-style:italic; }
 .close__note{ font-size:.84rem; font-style:italic; color:var(--on-ink-dim); }
 
 /* ═══ FICHA ═══ */
-/* 6 itens → 3 colunas fecham duas linhas exatas, sem célula vazia */
+/* 3 colunas; se sobrar 1 item sozinho na última linha, ele ocupa a largura toda */
 .ficha{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:rgba(237,229,214,.14); border:1px solid rgba(237,229,214,.14); }
-@media (max-width:880px){ .ficha{ grid-template-columns:repeat(2,1fr); } }
-@media (max-width:520px){ .ficha{ grid-template-columns:1fr; } }
+.ficha__c:nth-last-child(1):nth-child(3n+1){ grid-column:1/-1; }
+@media (max-width:880px){
+  .ficha{ grid-template-columns:repeat(2,1fr); }
+  .ficha__c:nth-last-child(1):nth-child(3n+1){ grid-column:auto; }
+  .ficha__c:nth-last-child(1):nth-child(2n+1){ grid-column:1/-1; }
+}
+@media (max-width:520px){ .ficha{ grid-template-columns:1fr; } .ficha__c{ grid-column:auto!important; } }
 .ficha__c{ background:var(--ink); padding:clamp(1.3rem,2.6vw,2rem); transition:background .4s; }
 .ficha__c:hover{ background:var(--ink-2); }
 .ficha__c h4{ font:600 .62rem/1 var(--sans); letter-spacing:.24em; text-transform:uppercase; color:var(--ocre); margin-bottom:.85rem; }
