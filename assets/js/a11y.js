@@ -8,6 +8,7 @@
 const $  = (s, c = document) => c.querySelector(s);
 const $$ = (s, c = document) => [...c.querySelectorAll(s)];
 const root = document.documentElement;
+const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
 const KEY = 'cartografias.a11y.v1';
 
 /* ─────────── ESTADO ─────────── */
@@ -34,6 +35,8 @@ const apply = () => {
 
   // régua e máscara não convivem: a última ligada vence
   if (S.ruler && S.mask) S.mask = false;
+
+  if (S.ruler || S.mask) desenhar();
 
   syncUI();
   const n = countActive();
@@ -150,56 +153,121 @@ $('#a11yReset').addEventListener('click', () => {
 });
 
 /* ─────────── RÉGUA E MÁSCARA ─────────── */
+/* Com mouse, a guia segue o ponteiro. No toque isso não funciona: o dedo é
+   usado para rolar, então a guia saltava junto e parava onde o dedo largasse.
+   Em telas de toque ela fica parada e se move por um puxador arrastável. */
 const ruler = $('#a11yRuler');
 const maskT = $('#a11yMaskTop'), maskB = $('#a11yMaskBot');
-let py = innerHeight / 2, rafTrack = 0;
+const grip  = $('#a11yGuideGrip');
+const TOQUE = matchMedia('(hover: none), (pointer: coarse)');
 
-const track = (y) => {
-  py = y;
+let py = Math.round(innerHeight * 0.42), rafTrack = 0;
+
+const desenhar = () => {
   if (rafTrack) return;
   rafTrack = requestAnimationFrame(() => {
     rafTrack = 0;
-    if (S.ruler) ruler.style.top = (py - ruler.offsetHeight / 2) + 'px';
+    const alvo = clamp(py, 40, innerHeight - 40);
+    if (S.ruler) ruler.style.top = (alvo - ruler.offsetHeight / 2) + 'px';
     if (S.mask) {
-      const band = 88;
-      maskT.style.height = Math.max(0, py - band / 2) + 'px';
-      maskB.style.height = Math.max(0, innerHeight - py - band / 2) + 'px';
+      const faixa = TOQUE.matches ? 132 : 88;
+      maskT.style.height = Math.max(0, alvo - faixa / 2) + 'px';
+      maskB.style.height = Math.max(0, innerHeight - alvo - faixa / 2) + 'px';
     }
+    if (grip) grip.style.top = alvo + 'px';
   });
 };
-addEventListener('mousemove', e => { if (S.ruler || S.mask) track(e.clientY); }, { passive: true });
-addEventListener('touchmove', e => {
-  if ((S.ruler || S.mask) && e.touches[0]) track(e.touches[0].clientY);
+
+const track = (y) => { py = y; desenhar(); };
+
+addEventListener('mousemove', e => {
+  if ((S.ruler || S.mask) && !TOQUE.matches) track(e.clientY);
 }, { passive: true });
+
+/* puxador: só aparece em telas de toque, arrasta a guia sem rolar a página */
+if (grip) {
+  let arrastando = false;
+  const iniciar = (e) => {
+    arrastando = true;
+    grip.setPointerCapture?.(e.pointerId);
+    grip.classList.add('is-drag');
+    e.preventDefault();
+  };
+  const mover = (e) => { if (arrastando) { track(e.clientY); e.preventDefault(); } };
+  const soltar = () => { arrastando = false; grip.classList.remove('is-drag'); };
+  grip.addEventListener('pointerdown', iniciar);
+  grip.addEventListener('pointermove', mover);
+  addEventListener('pointerup', soltar);
+  addEventListener('pointercancel', soltar);
+
+  grip.addEventListener('keydown', e => {
+    const passo = e.shiftKey ? 60 : 20;
+    if (e.key === 'ArrowUp')   { track(py - passo); e.preventDefault(); }
+    if (e.key === 'ArrowDown') { track(py + passo); e.preventDefault(); }
+  });
+}
+
+addEventListener('resize', () => { py = clamp(py, 40, innerHeight - 40); desenhar(); });
+desenhar();
 
 /* ─────────── VLIBRAS ─────────── */
 let librasLoaded = false, librasLoading = false;
 const librasNote = $('#librasNote');
 
+const aviso = (txt, some) => {
+  librasNote.hidden = false;
+  librasNote.textContent = txt;
+  if (some) setTimeout(() => { librasNote.hidden = true; }, 7000);
+};
+
+/* O plugin procura por este markup para se montar. Sem ele o script carrega,
+   o construtor não reclama e nada aparece na tela. */
+const criarContainerVLibras = () => {
+  if ($('div[vw]')) return;
+  const wrap = document.createElement('div');
+  wrap.setAttribute('vw', '');
+  wrap.className = 'enabled';
+  wrap.innerHTML =
+    '<div vw-access-button class="active"></div>' +
+    '<div vw-plugin-wrapper><div class="vw-plugin-top-wrapper"></div></div>';
+  document.body.appendChild(wrap);
+};
+
 function toggleLibras(on) {
-  if (!on) return;
+  if (!on) { librasNote.hidden = true; return; }
   if (librasLoaded || librasLoading) return;
   librasLoading = true;
-  librasNote.hidden = false;
-  librasNote.textContent = 'Carregando o tradutor de Libras do VLibras (gov.br)…';
+  aviso('Carregando o tradutor de Libras do VLibras (gov.br)…');
+  criarContainerVLibras();
 
   const s = document.createElement('script');
   s.src = 'https://vlibras.gov.br/app/vlibras-plugin.js';
   s.async = true;
   s.onload = () => {
+    librasLoading = false;
     try {
       new window.VLibras.Widget('https://vlibras.gov.br/app');
-      librasLoaded = true;
-      librasNote.textContent = 'Tradutor de Libras ativo. Use o boneco na lateral da tela para traduzir os textos.';
-      setTimeout(() => { librasNote.hidden = true; }, 6000);
     } catch {
-      librasNote.textContent = 'Não foi possível iniciar o VLibras. Tente recarregar a página.';
+      aviso('Não foi possível iniciar o VLibras. Tente recarregar a página.');
+      return;
     }
-    librasLoading = false;
+    // só confirma depois de ver o boneco na tela; o plugin monta em etapas
+    let tentativas = 0;
+    const conferir = setInterval(() => {
+      const botao = $('div[vw] [vw-access-button]');
+      if (botao && botao.offsetParent !== null) {
+        clearInterval(conferir);
+        librasLoaded = true;
+        aviso('Tradutor de Libras ativo. Use o boneco na lateral da tela.', true);
+      } else if (++tentativas > 30) {
+        clearInterval(conferir);
+        aviso('O VLibras demorou a responder. Tente recarregar a página.');
+      }
+    }, 400);
   };
   s.onerror = () => {
     librasLoading = false;
-    librasNote.textContent = 'Sem conexão com o VLibras (vlibras.gov.br). O recurso precisa de internet.';
+    aviso('Sem conexão com o VLibras (vlibras.gov.br). O recurso precisa de internet.');
   };
   document.body.appendChild(s);
 }

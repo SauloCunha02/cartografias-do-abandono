@@ -78,6 +78,11 @@ o efeito — simular deixaria pior justamente para quem já é daltônico. As ma
 `I + Shift·(I − S)` atenuadas a 65%, aplicadas em cada filho direto de `<body>`: aplicá-las
 em `html` ou `body` criaria um containing block e quebraria todo `position: fixed` da página.
 
+A guia de leitura (linha de destaque e máscara) tem dois modos: com mouse ela
+segue o ponteiro; em telas de toque fica parada e se move por um puxador
+arrastável à direita — o dedo ali serve para rolar a página, então segui-lo
+fazia a guia saltar. No toque, todos os alvos têm no mínimo 44 px.
+
 Atalhos: `Alt`+`A` painel · `Alt`+`L` leitura em voz alta · `Esc` interrompe ou fecha.
 
 ## Robustez

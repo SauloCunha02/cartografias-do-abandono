@@ -150,6 +150,26 @@ html.a-mask .a11y-mask{ display:block; }
 .a11y-mask i:first-child{ top:0; }
 .a11y-mask i:last-child{ bottom:0; }
 
+/* Puxador da guia — só em telas de toque, onde o dedo serve para rolar e não
+   pode também arrastar a guia. Fica à direita, ao alcance do polegar. */
+.a11y-grip{
+  position:fixed; right:.55rem; z-index:612; display:none;
+  width:46px; height:46px; margin-top:-23px; border-radius:50%;
+  place-items:center; touch-action:none; cursor:grab;
+  background:var(--ink-2); color:var(--ocre-2);
+  border:1.5px solid var(--ocre); box-shadow:0 6px 20px rgba(0,0,0,.45);
+}
+html.a-ruler .a11y-grip,html.a-mask .a11y-grip{ display:grid; }
+.a11y-grip.is-drag{ cursor:grabbing; background:var(--ocre); color:var(--ink); transform:scale(1.08); }
+@media (hover:hover) and (pointer:fine){
+  /* com mouse a guia segue o ponteiro: o puxador só atrapalharia */
+  html.a-ruler .a11y-grip,html.a-mask .a11y-grip{ display:none; }
+}
+/* faixa mais alta no toque: o dedo é menos preciso que o ponteiro */
+@media (hover:none),(pointer:coarse){
+  html.a-ruler .a11y-ruler{ height:3.1em; }
+}
+
 /* ══════════ 7. EFEITOS DESLIGADOS ══════════ */
 html.a-nofx *,html.a-nofx *::before,html.a-nofx *::after{
   animation-duration:.001ms !important; animation-iteration-count:1 !important;
@@ -274,7 +294,31 @@ html:not(.a-libras) div[vw]{ display:none !important; }
   background:rgba(237,229,214,.1); border:1px solid rgba(237,229,214,.2); color:var(--bone);
 }
 
-/* ══════════ 18. IMPRESSÃO ══════════ */
+/* ══════════ 18. TELAS DE TOQUE ══════════ */
+/* Alvos de no mínimo 44px: dedo não tem a precisão do ponteiro (WCAG 2.5.5). */
+@media (hover:none),(pointer:coarse){
+  .a11y__hd .icb,#a11yClose{ width:46px; height:46px; }
+  .tts{ gap:.35rem; padding:.5rem .55rem; bottom:1rem; }
+  .tts__b{ width:46px; height:46px; }
+  .tts__rate{ min-width:46px; height:46px; padding:0 .5rem; }
+  .seg button{ min-height:46px; padding:.75rem .6rem; }
+  .seg--cb button{ min-height:56px; }
+  .a11y__ft .btn{ min-height:46px; padding-inline:1.1rem; }
+  .sw{ padding:.85rem .2rem; min-height:52px; }
+  .sw__box{ width:46px; height:26px; }
+  .sw__box::after{ width:20px; height:20px; }
+  .sw[aria-checked="true"] .sw__box::after{ transform:translateX(20px); }
+  .prof button{ min-height:56px; }
+  .a11y__bd{ padding-bottom:1.6rem; }
+}
+
+/* o painel some por baixo da barra de leitura quando as duas estão abertas */
+@media (max-width:560px){
+  html.a-tts .a11y__ft{ padding-bottom:1.1rem; }
+  .tts{ width:calc(100vw - 1.2rem); justify-content:center; }
+}
+
+/* ══════════ 19. IMPRESSÃO ══════════ */
 @media print{
   .a11y,.a11y-open,.tts,.a11y-ruler,.a11y-mask,div[vw],.a11y-filters{ display:none !important; }
   html[class*="cb-"] body>*{ filter:none !important; }
