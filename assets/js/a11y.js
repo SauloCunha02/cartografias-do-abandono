@@ -206,93 +206,181 @@ function toggleLibras(on) {
 
 /* ─────────── LEITURA EM VOZ ALTA ─────────── */
 const synth = window.speechSynthesis;
+const ttsSupported = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
 const ttsBar = $('#ttsBar');
 const ttsState = $('#ttsState');
 const btnPlay = $('#ttsPlay'), btnStop = $('#ttsStop');
 const btnPrev = $('#ttsPrev'), btnNext = $('#ttsNext'), btnRate = $('#ttsRate');
 
-let blocks = [], cursorIdx = -1, speaking = false, paused = false, keepAlive = 0;
+/* Um "trecho" é uma frase. Blocos longos são fatiados: dá destaque mais fino e,
+   se a síntese morrer no meio, perde-se uma frase — não o parágrafo inteiro. */
+let parts = [];      // [{el, text, block}]
+let pi = -1;         // índice do trecho atual
+let speaking = false, paused = false, watchdog = 0;
 
-const markBlocks = () => {
-  const sel = 'main p, main h1, main h2, main h3, main h4, main figcaption, main dd, main .q__t, main .dim__kw';
-  blocks = $$(sel).filter(el => {
-    if (el.closest('.a11y, .tts, .roteiro, .lb')) return false;
-    const t = el.textContent.trim();
-    return t.length > 1 && el.offsetParent !== null;
-  });
-  blocks.forEach((el, i) => { el.dataset.read = i; });
+const BLOCK_SEL = [
+  'main p', 'main h1', 'main h2', 'main h3', 'main h4',
+  'main figcaption', 'main dd', 'main .facts dt', 'main .q__t',
+  'main .dim__ttl', 'main .dim__kw', 'main .divider__sub', 'main .hero__meta',
+].join(', ');
+
+/* Texto como um leitor de tela ouviria: sem conteúdo decorativo e sem palavras
+   grudadas onde havia quebra de linha. Mantém .sr-only, que é o texto real. */
+const readable = (el) => {
+  const c = el.cloneNode(true);
+  c.querySelectorAll('[aria-hidden="true"]').forEach(n => n.remove());
+  c.querySelectorAll('br').forEach(n => n.replaceWith(' '));
+  return c.textContent.replace(/\s+/g, ' ').trim();
 };
 
-const ttsSupported = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+/* Corta o texto em trechos de no máximo MAXLEN caracteres.
+   Três estágios, do corte mais natural ao mais bruto: ponto final,
+   depois pontuação interna, e só então limite de palavra. Uma frase
+   longa sem ponto (comum neste catálogo) precisa dos três. */
+const MAXLEN = 220;
+
+const splitBy = (txt, re) => {
+  const raw = txt.match(re) || [txt];
+  const out = [];
+  let buf = '';
+  for (const frag of raw) {
+    const f = frag.trim();
+    if (!f) continue;
+    if (!buf) buf = f;
+    else if ((buf + ' ' + f).length <= MAXLEN) buf += ' ' + f;
+    else { out.push(buf); buf = f; }
+  }
+  if (buf) out.push(buf);
+  return out;
+};
+
+const byWords = (txt) => {
+  const out = [];
+  let buf = '';
+  for (const w of txt.split(/\s+/)) {
+    if (!buf) buf = w;
+    else if ((buf + ' ' + w).length <= MAXLEN) buf += ' ' + w;
+    else { out.push(buf); buf = w; }
+  }
+  if (buf) out.push(buf);
+  return out;
+};
+
+const sentences = (t) => {
+  const out = [];
+  for (const frase of splitBy(t, /[^.!?…]+[.!?…]+["”'’)]*\s*|[^.!?…]+$/g)) {
+    if (frase.length <= MAXLEN) { out.push(frase); continue; }
+    // frase longa: tenta pontuação interna
+    for (const parte of splitBy(frase, /[^,;:—–]+[,;:—–]+\s*|[^,;:—–]+$/g)) {
+      if (parte.length <= MAXLEN) out.push(parte);
+      else out.push(...byWords(parte));   // último recurso
+    }
+  }
+  return out.filter(x => /[\p{L}\p{N}]/u.test(x));
+};
+
+const buildParts = () => {
+  const els = $$(BLOCK_SEL).filter(el =>
+    !el.closest('.a11y, .tts, .roteiro, .lb') && readable(el).length > 1);
+  parts = [];
+  els.forEach((el, bi) => {
+    el.dataset.read = bi;
+    sentences(readable(el)).forEach(text => parts.push({ el, text, block: bi }));
+  });
+};
+
+/* o trecho pode estar numa aba fechada ou num acordeão recolhido */
+const reveal = (el) => {
+  const pane = el.closest('.tl__pane');
+  if (pane && pane.hidden) $('#' + pane.getAttribute('aria-labelledby'))?.click();
+  const dim = el.closest('.dim');
+  if (dim && !dim.classList.contains('is-on')) $('.dim__hd', dim)?.click();
+};
 
 let ptVoice = null;
 const pickVoice = () => {
   const vs = synth?.getVoices?.() || [];
   ptVoice = vs.find(v => /pt[-_]BR/i.test(v.lang)) || vs.find(v => /^pt/i.test(v.lang)) || null;
 };
-if (ttsSupported) {
-  pickVoice();
-  synth.addEventListener?.('voiceschanged', pickVoice);
-}
+if (ttsSupported) { pickVoice(); synth.addEventListener?.('voiceschanged', pickVoice); }
 
 const setStatus = (t) => { ttsState.textContent = t; };
-const iconPlay = '<svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M7 4.5v15l13-7.5z" fill="currentColor"/></svg>';
-const iconPause = '<svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M7 4.5h4v15H7zm6 0h4v15h-4z" fill="currentColor"/></svg>';
+const ICON_PLAY  = '<svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M7 4.5v15l13-7.5z" fill="currentColor"/></svg>';
+const ICON_PAUSE = '<svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M7 4.5h4v15H7zm6 0h4v15h-4z" fill="currentColor"/></svg>';
+
+const clearMark = () => $$('.is-speaking').forEach(el => el.classList.remove('is-speaking'));
+
+const progress = () => {
+  const b = parts[pi]?.block ?? 0;
+  const total = parts.length ? parts[parts.length - 1].block + 1 : 0;
+  return 'Lendo ' + (b + 1) + ' de ' + total;
+};
 
 const showTTSBar = (v) => {
   ttsBar.classList.toggle('is-on', v);
   ttsBar.setAttribute('aria-hidden', String(!v));
-  if (v) {
-    markBlocks();
-    setStatus(ttsSupported
-      ? 'Toque num parágrafo para ouvir, ou use ▶'
-      : 'Este navegador não tem síntese de voz.');
-    [btnPlay, btnPrev, btnNext, btnStop].forEach(b => { b.disabled = !ttsSupported; });
-  }
+  if (!v) return;
+  buildParts();
+  setStatus(ttsSupported ? 'Toque num parágrafo para ouvir, ou use ▶'
+                         : 'Este navegador não tem síntese de voz.');
+  [btnPlay, btnPrev, btnNext, btnStop].forEach(b => { b.disabled = !ttsSupported; });
 };
 
-const clearMark = () => $$('[data-read].is-speaking').forEach(el => el.classList.remove('is-speaking'));
+const speakPart = (i) => {
+  if (!ttsSupported || !parts.length) return;
+  pi = Math.max(0, Math.min(i, parts.length - 1));
+  const part = parts[pi], el = part.el;
 
-const speakAt = (i) => {
-  if (!ttsSupported || !blocks.length) return;
   synth.cancel();
-  cursorIdx = Math.max(0, Math.min(i, blocks.length - 1));
-  const el = blocks[cursorIdx];
+  reveal(el);
   clearMark();
   el.classList.add('is-speaking');
-  el.scrollIntoView({ block: 'center', behavior: S.nofx ? 'auto' : 'smooth' });
+  const r = el.getBoundingClientRect();
+  if (r.top < 80 || r.bottom > innerHeight - 80)
+    el.scrollIntoView({ block: 'center', behavior: S.nofx ? 'auto' : 'smooth' });
 
-  const u = new SpeechSynthesisUtterance(el.textContent.trim().replace(/\s+/g, ' '));
+  const u = new SpeechSynthesisUtterance(part.text);
   u.lang = 'pt-BR';
   if (ptVoice) u.voice = ptVoice;
   u.rate = S.rate;
   u.onend = () => {
-    if (!speaking) return;
-    if (cursorIdx < blocks.length - 1) speakAt(cursorIdx + 1);
+    if (!speaking || paused) return;
+    if (pi < parts.length - 1) speakPart(pi + 1);
     else stopTTS('Leitura concluída.');
   };
-  u.onerror = () => stopTTS('A leitura foi interrompida.');
+  u.onerror = (e) => {
+    // cancel() dispara "interrupted"/"canceled": é troca de trecho, não falha
+    if (e.error === 'interrupted' || e.error === 'canceled') return;
+    if (speaking && pi < parts.length - 1) speakPart(pi + 1);
+    else stopTTS('A leitura foi interrompida.');
+  };
 
   speaking = true; paused = false;
-  btnPlay.innerHTML = iconPause;
+  btnPlay.innerHTML = ICON_PAUSE;
   btnPlay.setAttribute('aria-label', 'Pausar leitura');
-  setStatus(`Lendo ${cursorIdx + 1} de ${blocks.length}`);
+  setStatus(progress());
   synth.speak(u);
+};
 
-  // Chrome interrompe falas longas por conta própria; este ping mantém viva.
-  clearInterval(keepAlive);
-  keepAlive = setInterval(() => {
-    if (!speaking || paused) return;
-    synth.pause(); synth.resume();
-  }, 9000);
+/* Se a síntese morrer sem avisar (acontece em sessões longas), o vigia retoma.
+   Substitui o antigo pause()/resume() periódico, que cortava a fala no meio. */
+const startWatchdog = () => {
+  clearInterval(watchdog);
+  watchdog = setInterval(() => {
+    if (!speaking || paused || !ttsSupported) return;
+    if (!synth.speaking && !synth.pending) {
+      if (pi < parts.length - 1) speakPart(pi + 1);
+      else stopTTS('Leitura concluída.');
+    }
+  }, 1600);
 };
 
 function stopTTS(msg) {
-  clearInterval(keepAlive);
+  clearInterval(watchdog);
   if (ttsSupported) synth.cancel();
-  speaking = false; paused = false; cursorIdx = -1;
+  speaking = false; paused = false; pi = -1;
   clearMark();
-  btnPlay.innerHTML = iconPlay;
+  btnPlay.innerHTML = ICON_PLAY;
   btnPlay.setAttribute('aria-label', 'Iniciar leitura');
   setStatus(msg || 'Toque num parágrafo para ouvir, ou use ▶');
 }
@@ -300,40 +388,76 @@ function stopTTS(msg) {
 btnPlay.addEventListener('click', () => {
   if (!ttsSupported) return;
   if (!speaking) {
-    markBlocks();
-    // começa pelo primeiro bloco visível na tela
-    const start = blocks.findIndex(el => el.getBoundingClientRect().bottom > 90);
-    speakAt(start < 0 ? 0 : start);
+    buildParts();
+    const start = parts.findIndex(p => p.el.getBoundingClientRect().bottom > 90);
+    speakPart(start < 0 ? 0 : start);
+    startWatchdog();
   } else if (paused) {
     synth.resume(); paused = false;
-    btnPlay.innerHTML = iconPause;
-    setStatus(`Lendo ${cursorIdx + 1} de ${blocks.length}`);
+    btnPlay.innerHTML = ICON_PAUSE;
+    btnPlay.setAttribute('aria-label', 'Pausar leitura');
+    setStatus(progress());
   } else {
     synth.pause(); paused = true;
-    btnPlay.innerHTML = iconPlay;
+    btnPlay.innerHTML = ICON_PLAY;
+    btnPlay.setAttribute('aria-label', 'Continuar leitura');
     setStatus('Pausado');
   }
 });
 btnStop.addEventListener('click', () => stopTTS());
-btnPrev.addEventListener('click', () => speaking && speakAt(cursorIdx - 1));
-btnNext.addEventListener('click', () => speaking && speakAt(cursorIdx + 1));
+
+/* pular navega por bloco, não por frase, e funciona mesmo pausado */
+const jumpBlock = (dir) => {
+  if (!ttsSupported) return;
+  if (!parts.length) buildParts();
+  const cur = pi < 0 ? 0 : parts[pi].block;
+  const idx = parts.findIndex(p => p.block === cur + dir);
+  if (idx < 0) return;
+  paused = false;
+  speakPart(idx);
+  startWatchdog();
+};
+btnPrev.addEventListener('click', () => jumpBlock(-1));
+btnNext.addEventListener('click', () => jumpBlock(1));
 
 const RATES = [0.75, 1, 1.25, 1.5];
 btnRate.addEventListener('click', () => {
   S.rate = RATES[(RATES.indexOf(S.rate) + 1) % RATES.length] ?? 1;
   persist(); syncUI();
-  if (speaking) speakAt(cursorIdx);
+  if (speaking) speakPart(pi);
 });
 
-/* clicar num bloco lê a partir dele */
+/* Clicar num trecho lê a partir dele.
+
+   Vários trechos moram dentro de botões — as perguntas (.q__t) e os títulos
+   das dimensões (.dim__ttl) — então não dá para simplesmente ignorar botões:
+   isso deixava justamente esse conteúdo inalcançável pelo clique. O ouvinte
+   roda na fase de captura e, quando o trecho está dentro de um controle cuja
+   ação pode esperar, lê em vez de acionar o controle.
+
+   Controles com função própria (abrir foto, trocar aba) continuam vencendo. */
+const CTRL_VENCE = '.lnk, [data-goto], [data-zoom], .cmp__zoom, .cmp__grip, .tl__tab, .burger, .btn, .icb';
+
 document.addEventListener('click', e => {
   if (!S.tts || !ttsSupported) return;
-  if (e.target.closest('.a11y, .tts, .roteiro, .lb, .nav, a, button, [role="button"], input, textarea')) return;
+  if (e.target.closest('.a11y, .tts, .roteiro, .lb, .nav')) return;
+  if (e.target.closest(CTRL_VENCE)) return;
+
   const el = e.target.closest('[data-read]');
   if (!el) return;
-  markBlocks();
-  speakAt(Number(el.dataset.read) || blocks.indexOf(el));
-});
+
+  // dentro de um controle adiável: lê e segura a ação dele
+  if (e.target.closest('button, [role="button"], label, a')) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  buildParts();
+  const idx = parts.findIndex(p => p.el === el);
+  if (idx < 0) return;
+  speakPart(idx);
+  startWatchdog();
+}, true);
 
 /* ─────────── AVISOS PARA LEITOR DE TELA ─────────── */
 const live = $('#a11yLive');
@@ -360,7 +484,7 @@ addEventListener('keydown', e => {
 });
 
 /* ─────────── INÍCIO ─────────── */
-markBlocks();
+buildParts();
 if (S.libras) toggleLibras(true);
 if (S.tts) showTTSBar(true);
 apply();
