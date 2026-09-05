@@ -8,6 +8,8 @@
 const $  = (s, c = document) => c.querySelector(s);
 const $$ = (s, c = document) => [...c.querySelectorAll(s)];
 const RM = window.matchMedia('(prefers-reduced-motion: reduce)');
+/* o painel de acessibilidade pode desligar os efeitos a qualquer momento */
+const fxOff = () => document.documentElement.classList.contains('a-nofx');
 const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
 
 /* rede de segurança: um erro de script nunca deixa a página travada */
@@ -95,6 +97,7 @@ if (pxItems.length && !RM.matches) {
   pxItems.forEach(i => visIO.observe(i.el));
 
   const loop = () => {
+    if (fxOff()) { requestAnimationFrame(loop); return; }
     const vh = innerHeight;
     for (const it of pxItems) {
       if (it.vis) {
@@ -113,7 +116,7 @@ if (pxItems.length && !RM.matches) {
 
 /* ─────────── 5. NAV + PROGRESSO + SCROLLSPY ─────────── */
 const nav = $('#nav'), pBar = $('#progressBar');
-let lastY = 0, navTicking = false;
+let lastY = 0, navTicking = false, navOpen = false;
 
 const onScroll = () => {
   const y = scrollY;
@@ -140,7 +143,6 @@ $$('[data-spy-target]').forEach(s => spyIO.observe(s));
 
 /* menu móvel */
 const burger = $('#burger'), navLinks = $('#navLinks');
-let navOpen = false;
 const setNav = (v) => {
   navOpen = v;
   navLinks.classList.toggle('is-open', v);
@@ -157,6 +159,7 @@ if (matchMedia('(hover:hover) and (pointer:fine)').matches && !RM.matches) {
   let mx = innerWidth / 2, my = innerHeight / 2, rx = mx, ry = my;
 
   addEventListener('mousemove', e => {
+    if (fxOff()) { cur.classList.remove('on'); return; }
     mx = e.clientX; my = e.clientY;
     cur.classList.add('on');
     dot.style.transform = `translate3d(${mx}px,${my}px,0)`;
@@ -164,6 +167,7 @@ if (matchMedia('(hover:hover) and (pointer:fine)').matches && !RM.matches) {
   addEventListener('mouseleave', () => cur.classList.remove('on'));
 
   (function ring_(){
+    if (fxOff()) { requestAnimationFrame(ring_); return; }
     rx = lerp(rx, mx, .16); ry = lerp(ry, my, .16);
     ring.style.transform = `translate3d(${rx.toFixed(1)}px,${ry.toFixed(1)}px,0)`;
     txt.style.transform  = `translate3d(${rx.toFixed(1)}px,${ry.toFixed(1)}px,0) translate(-50%,-50%)`;
@@ -226,7 +230,7 @@ if (cmp) {
   // varredura de apresentação ao entrar em cena
   let teased = false;
   new IntersectionObserver(es => es.forEach(e => {
-    if (!e.isIntersecting || teased || RM.matches) return;
+    if (!e.isIntersecting || teased || RM.matches || fxOff()) return;
     teased = true;
     const t0 = performance.now();
     const sweep = (t) => {

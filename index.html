@@ -13,10 +13,9 @@
 <meta property="og:image" content="assets/img/capa.jpg">
 <link rel="icon" href="assets/img/favicon.svg">
 <link rel="preload" as="image" href="assets/img/capa.webp" type="image/webp">
-<link rel="preload" as="font" type="font/woff2" href="assets/fonts/fraunces-normal.woff2" crossorigin>
-<link rel="preload" as="font" type="font/woff2" href="assets/fonts/newsreader-normal.woff2" crossorigin>
 <link rel="stylesheet" href="assets/css/fonts.css">
 <link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/a11y.css">
 </head>
 <body class="is-loading no-js">
 <script>document.body.classList.remove("no-js");</script>
@@ -53,6 +52,12 @@
     <a href="#ficha" data-spy>Ficha técnica</a>
   </nav>
   <div class="nav__act">
+    <button class="a11y-open" id="a11yOpen" type="button" aria-expanded="false" aria-controls="a11yPanel" aria-label="Acessibilidade" title="Acessibilidade (Alt + A)">
+      <svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true">
+        <circle cx="12" cy="4.2" r="1.9" fill="currentColor"/>
+        <path d="M3.6 7.6c2.7.9 5.4 1.4 8.4 1.4s5.7-.5 8.4-1.4M12 9v5m0 0-3 6.6M12 14l3 6.6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+      </svg>
+    </button>
     <button class="btn btn--ghost" id="openRoteiro" type="button" aria-expanded="false" aria-controls="roteiro">
       <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M5 4h14v16l-7-3.4L5 20z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg>
       <span class="btn__t">Roteiro</span><i class="badge" id="roteiroBadge">0/12</i>
@@ -399,6 +404,173 @@
   <p class="lb__idx" id="lbIdx"></p>
 </div>
 
+<!-- ══════════ ACESSIBILIDADE ══════════ -->
+<p class="sr-only" id="a11yLive" role="status" aria-live="polite"></p>
+<div class="a11y-ruler" id="a11yRuler" aria-hidden="true"></div>
+<div class="a11y-mask" id="a11yMask" aria-hidden="true"><i id="a11yMaskTop"></i><i id="a11yMaskBot"></i></div>
+
+<div class="tts" id="ttsBar" role="group" aria-label="Leitura em voz alta" aria-hidden="true">
+  <button class="tts__b" id="ttsPrev" type="button" aria-label="Trecho anterior"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M17 5v14L7 12zM6 5v14" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></button>
+  <button class="tts__b" id="ttsPlay" type="button" aria-label="Iniciar leitura"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M7 4.5v15l13-7.5z" fill="currentColor"/></svg></button>
+  <button class="tts__b" id="ttsNext" type="button" aria-label="Próximo trecho"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 5v14l10-7zM18 5v14" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></button>
+  <button class="tts__b" id="ttsStop" type="button" aria-label="Parar leitura"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="1.5" fill="currentColor"/></svg></button>
+  <span class="tts__st" id="ttsState">Toque num parágrafo para ouvir</span>
+  <button class="tts__rate" id="ttsRate" type="button" aria-label="Velocidade da leitura">1×</button>
+</div>
+
+<aside class="a11y" id="a11yPanel" aria-hidden="true" role="dialog" aria-modal="false" aria-label="Preferências de acessibilidade">
+  <div class="a11y__hd">
+    <div>
+      <p class="eyebrow">Acessibilidade</p>
+      <h2>Como você prefere ler</h2>
+    </div>
+    <button class="icb" id="a11yClose" type="button" aria-label="Fechar painel"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+  </div>
+  <p class="a11y__hint">Tudo fica salvo neste navegador e continua valendo nas próximas visitas.</p>
+
+  <div class="a11y__bd">
+
+    <div class="a11y__grp">
+      <p class="a11y__lbl">Perfis rápidos</p>
+      <div class="prof">
+        <button type="button" data-profile="leitura">
+          <svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path d="M4 5.5h6a2.5 2.5 0 0 1 2.5 2.5v11A2 2 0 0 0 10.5 17H4zM20 5.5h-6A2.5 2.5 0 0 0 11.5 8v11A2 2 0 0 1 13.5 17H20z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+          <span><b>Leitura assistida</b><span>Voz alta, texto maior, mais espaçado</span></span>
+        </button>
+        <button type="button" data-profile="baixavisao">
+          <svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+          <span><b>Baixa visão</b><span>Texto grande, alto contraste, cursor maior</span></span>
+        </button>
+        <button type="button" data-profile="movimento">
+          <svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path d="M4 12h6m4 0h6M12 4v6m0 4v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+          <span><b>Sensível a movimento</b><span>Desliga animações e efeitos</span></span>
+        </button>
+        <button type="button" data-profile="foco">
+          <svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path d="M3 9V5.5A2.5 2.5 0 0 1 5.5 3H9M15 3h3.5A2.5 2.5 0 0 1 21 5.5V9M21 15v3.5a2.5 2.5 0 0 1-2.5 2.5H15M9 21H5.5A2.5 2.5 0 0 1 3 18.5V15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <span><b>Foco na linha</b><span>Escurece a página fora do trecho lido</span></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="a11y__grp">
+      <p class="a11y__lbl">Leitura</p>
+      <button class="sw" type="button" role="switch" aria-checked="false" data-k="tts">
+        <span class="sw__t"><span class="sw__n">Ler em voz alta</span><span class="sw__d">Abre os controles de voz; toque num parágrafo para ouvi-lo</span></span>
+        <span class="sw__box" aria-hidden="true"></span>
+      </button>
+      <button class="sw" type="button" role="switch" aria-checked="false" data-k="ruler">
+        <span class="sw__t"><span class="sw__n">Linha de destaque</span><span class="sw__d">Uma régua acompanha o cursor para guiar a leitura</span></span>
+        <span class="sw__box" aria-hidden="true"></span>
+      </button>
+      <button class="sw" type="button" role="switch" aria-checked="false" data-k="mask">
+        <span class="sw__t"><span class="sw__n">Máscara de leitura</span><span class="sw__d">Escurece tudo, menos a faixa em que você está</span></span>
+        <span class="sw__box" aria-hidden="true"></span>
+      </button>
+      <button class="sw" type="button" role="switch" aria-checked="false" data-k="spacing">
+        <span class="sw__t"><span class="sw__n">Mais espaçamento</span><span class="sw__d">Aumenta entrelinha e espaço entre letras e palavras</span></span>
+        <span class="sw__box" aria-hidden="true"></span>
+      </button>
+      <button class="sw" type="button" role="switch" aria-checked="false" data-k="legible">
+        <span class="sw__t"><span class="sw__n">Fonte de alta legibilidade</span><span class="sw__d">Troca as fontes por Atkinson Hyperlegible, desenhada para leitura difícil</span></span>
+        <span class="sw__box" aria-hidden="true"></span>
+      </button>
+      <div class="fld">
+        <p class="fld__n">Tamanho do texto</p>
+        <p class="fld__d">Aumenta o corpo de leitura sem quebrar o layout</p>
+        <div class="seg" data-seg="txt" role="group" aria-label="Tamanho do texto">
+          <button type="button" data-v="0" aria-pressed="true">Padrão</button>
+          <button type="button" data-v="1" aria-pressed="false">A+</button>
+          <button type="button" data-v="2" aria-pressed="false">A++</button>
+          <button type="button" data-v="3" aria-pressed="false">A+++</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="a11y__grp">
+      <p class="a11y__lbl">Cores e contraste</p>
+      <button class="sw" type="button" role="switch" aria-checked="false" data-k="hc">
+        <span class="sw__t"><span class="sw__n">Alto contraste</span><span class="sw__d">Preto e branco puros, com destaque em amarelo</span></span>
+        <span class="sw__box" aria-hidden="true"></span>
+      </button>
+      <div class="fld">
+        <p class="fld__n">Correção para daltonismo</p>
+        <p class="fld__d">Realça as cores que se confundem, em vez de apenas simular</p>
+        <div class="seg seg--cb" data-seg="cb" role="group" aria-label="Correção para daltonismo">
+          <button type="button" data-v="none" aria-pressed="true">
+            <span class="seg__sw" aria-hidden="true"><i style="background:#C0392B"></i><i style="background:#27AE60"></i><i style="background:#2980B9"></i></span>Nenhuma
+          </button>
+          <button type="button" data-v="protan" aria-pressed="false">
+            <span class="seg__sw" aria-hidden="true"><i style="background:#C0392B"></i><i style="background:#27AE60"></i></span>Protanopia
+          </button>
+          <button type="button" data-v="deutan" aria-pressed="false">
+            <span class="seg__sw" aria-hidden="true"><i style="background:#27AE60"></i><i style="background:#C0392B"></i></span>Deuteranopia
+          </button>
+          <button type="button" data-v="tritan" aria-pressed="false">
+            <span class="seg__sw" aria-hidden="true"><i style="background:#2980B9"></i><i style="background:#F1C40F"></i></span>Tritanopia
+          </button>
+          <button type="button" data-v="acromat" aria-pressed="false">
+            <span class="seg__sw" aria-hidden="true"><i style="background:#888"></i><i style="background:#CCC"></i></span>Acromatopsia
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="a11y__grp">
+      <p class="a11y__lbl">Movimento e navegação</p>
+      <button class="sw" type="button" role="switch" aria-checked="false" data-k="nofx">
+        <span class="sw__t"><span class="sw__n">Desativar efeitos</span><span class="sw__d">Sem animações, parallax, grão ou cursor personalizado</span></span>
+        <span class="sw__box" aria-hidden="true"></span>
+      </button>
+      <button class="sw" type="button" role="switch" aria-checked="false" data-k="underline">
+        <span class="sw__t"><span class="sw__n">Sublinhar links</span><span class="sw__d">Links deixam de depender só da cor para serem identificados</span></span>
+        <span class="sw__box" aria-hidden="true"></span>
+      </button>
+      <button class="sw" type="button" role="switch" aria-checked="false" data-k="bigcursor">
+        <span class="sw__t"><span class="sw__n">Cursor ampliado</span><span class="sw__d">Ponteiro maior e de alto contraste</span></span>
+        <span class="sw__box" aria-hidden="true"></span>
+      </button>
+      <button class="sw" type="button" role="switch" aria-checked="false" data-k="focus">
+        <span class="sw__t"><span class="sw__n">Foco reforçado</span><span class="sw__d">Contorno mais visível ao navegar pelo teclado</span></span>
+        <span class="sw__box" aria-hidden="true"></span>
+      </button>
+    </div>
+
+    <div class="a11y__grp">
+      <p class="a11y__lbl">Libras</p>
+      <button class="sw" type="button" role="switch" aria-checked="false" data-k="libras">
+        <span class="sw__t"><span class="sw__n">Tradutor de Libras</span><span class="sw__d">Ativa o VLibras (gov.br) para traduzir os textos em Língua Brasileira de Sinais</span></span>
+        <span class="sw__box" aria-hidden="true"></span>
+      </button>
+      <p class="a11y-note" id="librasNote" hidden></p>
+    </div>
+
+    <div class="a11y__grp">
+      <p class="a11y__lbl">Atalhos de teclado</p>
+      <div class="a11y-keys">
+        <div><kbd>Alt</kbd> + <kbd>A</kbd> abre e fecha este painel</div>
+        <div><kbd>Alt</kbd> + <kbd>L</kbd> começa a leitura em voz alta</div>
+        <div><kbd>Esc</kbd> interrompe a leitura ou fecha o que estiver aberto</div>
+        <div><kbd>Tab</kbd> percorre todos os controles da página</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="a11y__ft">
+    <button class="btn btn--ghost" id="a11yReset" type="button">Restaurar padrão</button>
+    <span class="a11y__cnt" id="a11yCount">nenhum ajuste ativo</span>
+  </div>
+</aside>
+<div class="scrim" id="a11yScrim" hidden></div>
+
+<svg class="a11y-filters" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <filter id="cb-protan" color-interpolation-filters="linearRGB"><feColorMatrix type="matrix" values="1.0000 0.0000 0.0000 0 0 -0.1657 1.1657 0.0000 0 0 0.1970 -0.3543 1.1573 0 0 0 0 0 1 0"/></filter>
+  <filter id="cb-deutan" color-interpolation-filters="linearRGB"><feColorMatrix type="matrix" values="1.0000 0.0000 0.0000 0 0 -0.2844 1.2844 0.0000 0 0 0.1706 -0.3656 1.1950 0 0 0 0 0 1 0"/></filter>
+  <filter id="cb-tritan" color-interpolation-filters="linearRGB"><feColorMatrix type="matrix" values="1.0000 0.0000 0.0000 0 0 0.0000 1.3685 -0.3685 0 0 0.0228 -0.3315 1.3088 0 0 0 0 0 1 0"/></filter>
+  <filter id="cb-acromat" color-interpolation-filters="linearRGB"><feColorMatrix type="matrix" values="0.299 0.587 0.114 0 0 0.299 0.587 0.114 0 0 0.299 0.587 0.114 0 0 0 0 0 1 0"/></filter>
+</svg>
+
 <script src="assets/js/main.js" defer></script>
+<script src="assets/js/a11y.js" defer></script>
 </body>
 </html>

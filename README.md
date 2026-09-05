@@ -17,10 +17,11 @@ biblioteca externa nem requisição de rede.
 index.html                      página única do catálogo
 Cartografias-do-Abandono.pdf    catálogo completo, 11 páginas A4 paisagem
 assets/
-  css/fonts.css                 @font-face das fontes auto-hospedadas
+  css/fonts.css                 fontes embutidas em base64 (imunes a CORS em file://)
   css/style.css                 sistema visual completo
+  css/a11y.css                  painel e classes do módulo de acessibilidade
   js/main.js                    interações (JS puro, sem dependências)
-  fonts/                        Fraunces · Newsreader · Archivo (variáveis, subset latin)
+  js/a11y.js                    preferências de acessibilidade
   img/                          fotografias em .jpg + .webp, e o favicon
 tools/build_pdf.py              regenera o PDF a partir das mesmas imagens
 ```
@@ -59,7 +60,27 @@ Todas variáveis, auto-hospedadas, subset `latin` (cobre todo o português).
 O roteiro é salvo em `localStorage` (fica no navegador do professor, não vai para lugar
 nenhum) e é impresso junto com a página via `Ctrl+P`.
 
-## Acessibilidade e robustez
+## Acessibilidade
+
+Botão de pessoa na barra superior (ou `Alt` + `A`) abre o painel **Como você prefere ler**.
+Tudo é salvo em `localStorage` e continua valendo nas próximas visitas.
+
+| grupo | recursos |
+|---|---|
+| Perfis rápidos | Leitura assistida · Baixa visão · Sensível a movimento · Foco na linha |
+| Leitura | Voz alta (pt-BR) · Linha de destaque · Máscara de leitura · Espaçamento (WCAG 1.4.12) · Fonte Atkinson Hyperlegible · 4 tamanhos de texto |
+| Cores | Alto contraste · Correção para protanopia, deuteranopia, tritanopia e acromatopsia |
+| Movimento | Desativar efeitos · Sublinhar links · Cursor ampliado · Foco reforçado |
+| Libras | VLibras (gov.br), carregado sob demanda |
+
+A correção de daltonismo **compensa** as cores (daltonização), em vez de apenas simular
+o efeito — simular deixaria pior justamente para quem já é daltônico. As matrizes são
+`I + Shift·(I − S)` atenuadas a 65%, aplicadas em cada filho direto de `<body>`: aplicá-las
+em `html` ou `body` criaria um containing block e quebraria todo `position: fixed` da página.
+
+Atalhos: `Alt`+`A` painel · `Alt`+`L` leitura em voz alta · `Esc` interrompe ou fecha.
+
+## Robustez
 
 - Navegação completa por teclado; `aria-*` nos componentes interativos.
 - `prefers-reduced-motion` desliga parallax, revelações e cursor.

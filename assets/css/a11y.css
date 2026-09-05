@@ -1,0 +1,281 @@
+/* ═══════════════════════════════════════════════════════════
+   CARTOGRAFIAS DO ABANDONO — módulo de acessibilidade
+   Painel de preferências + classes de efeito aplicadas na raiz.
+   Carregado depois de style.css para poder sobrescrever tokens.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ══════════ 1. BOTÃO DE ACESSO ══════════ */
+.a11y-open{
+  position:relative; display:inline-grid; place-items:center; width:38px; height:38px; flex:0 0 auto;
+  border:1px solid rgba(237,229,214,.24); border-radius:2px; color:var(--bone);
+  transition:border-color .3s, color .3s, background .3s;
+}
+.a11y-open:hover{ border-color:var(--ocre); color:var(--ocre-2); background:rgba(201,145,63,.08); }
+.a11y-open.has-active{ border-color:var(--ocre); color:var(--ocre-2); }
+.a11y-open.has-active::after{
+  content:""; position:absolute; top:-3px; right:-3px; width:7px; height:7px;
+  border-radius:50%; background:var(--ocre-2); border:1.5px solid var(--ink);
+}
+
+/* ══════════ 2. PAINEL ══════════ */
+.a11y{
+  position:fixed; top:0 ; left:0; bottom:0; z-index:660; width:min(94vw,412px);
+  background:var(--ink-2); border-right:1px solid rgba(237,229,214,.14);
+  display:flex; flex-direction:column; transform:translateX(-101%);
+  transition:transform .55s var(--e); visibility:hidden; color:var(--bone);
+}
+.a11y.is-open{ transform:none; visibility:visible; }
+
+.a11y__hd{ display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; padding:1.4rem 1.4rem .7rem; }
+.a11y__hd h2{
+  font-family:var(--disp); font-weight:300; font-size:1.5rem; line-height:1.1;
+  color:var(--bone); font-variation-settings:"WONK" 1;
+}
+.a11y__hd .eyebrow{ margin-bottom:.5rem; }
+.a11y__hint{ padding:0 1.4rem 1rem; font-size:.8rem; font-style:italic; color:var(--on-ink-dim); }
+.a11y__bd{ flex:1; overflow-y:auto; padding:0 1.4rem 1.2rem; scrollbar-width:thin; overscroll-behavior:contain; }
+.a11y__ft{
+  display:flex; align-items:center; gap:.5rem; flex-wrap:wrap;
+  padding:.9rem 1.4rem; border-top:1px solid rgba(237,229,214,.12);
+}
+.a11y__cnt{ margin-left:auto; font:500 .66rem/1 var(--sans); letter-spacing:.1em; color:var(--on-ink-dim); font-variant-numeric:tabular-nums; }
+
+/* grupos */
+.a11y__grp{ border-top:1px solid rgba(237,229,214,.1); padding-top:1rem; margin-top:1.1rem; }
+.a11y__grp:first-child{ border-top:0; padding-top:0; margin-top:0; }
+.a11y__lbl{
+  font:600 .6rem/1 var(--sans); letter-spacing:.22em; text-transform:uppercase;
+  color:var(--ocre); margin-bottom:.85rem;
+}
+
+/* ══════════ 3. INTERRUPTORES ══════════ */
+.sw{
+  width:100%; display:grid; grid-template-columns:1fr auto; align-items:center; gap:.9rem;
+  padding:.7rem .2rem; text-align:left; border-radius:2px;
+  transition:background .25s;
+}
+.sw:hover{ background:rgba(237,229,214,.04); }
+.sw__t{ display:grid; gap:.18rem; min-width:0; }
+.sw__n{ font-family:var(--serif); font-size:.95rem; line-height:1.3; color:var(--bone); }
+.sw__d{ font:400 .74rem/1.35 var(--sans); color:var(--on-ink-dim); }
+.sw__box{
+  position:relative; width:40px; height:22px; border-radius:100px; flex:0 0 auto;
+  background:rgba(237,229,214,.14); border:1px solid rgba(237,229,214,.2);
+  transition:background .3s var(--e), border-color .3s;
+}
+.sw__box::after{
+  content:""; position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%;
+  background:var(--bone-3); transition:transform .3s var(--e), background .3s;
+}
+.sw[aria-checked="true"] .sw__box{ background:rgba(201,145,63,.4); border-color:var(--ocre); }
+.sw[aria-checked="true"] .sw__box::after{ transform:translateX(18px); background:var(--ocre-2); }
+
+/* ══════════ 4. SELETORES SEGMENTADOS ══════════ */
+.seg{ display:flex; gap:.25rem; margin-top:.5rem; flex-wrap:wrap; }
+.seg button{
+  flex:1 1 auto; min-width:52px; padding:.55rem .5rem; border-radius:2px;
+  border:1px solid rgba(237,229,214,.16); background:rgba(237,229,214,.02);
+  font:600 .68rem/1 var(--sans); letter-spacing:.06em; color:var(--bone-3);
+  transition:border-color .25s, background .25s, color .25s;
+}
+.seg button:hover{ border-color:rgba(201,145,63,.55); color:var(--bone); }
+.seg button[aria-pressed="true"]{ border-color:var(--ocre); background:rgba(201,145,63,.16); color:var(--ocre-2); }
+.seg--cb button{ display:grid; gap:.35rem; justify-items:center; padding:.6rem .4rem; }
+.seg__sw{ display:flex; gap:2px; }
+.seg__sw i{ width:9px; height:9px; border-radius:2px; }
+
+.fld{ padding:.7rem .2rem; }
+.fld__n{ font-family:var(--serif); font-size:.95rem; color:var(--bone); }
+.fld__d{ font:400 .74rem/1.35 var(--sans); color:var(--on-ink-dim); margin-top:.18rem; }
+
+/* perfis rápidos */
+.prof{ display:grid; gap:.4rem; }
+.prof button{
+  display:grid; grid-template-columns:auto 1fr; gap:.7rem; align-items:center;
+  padding:.75rem .85rem; border-radius:2px; text-align:left;
+  border:1px solid rgba(237,229,214,.16); background:rgba(237,229,214,.02);
+  transition:border-color .25s, background .25s;
+}
+.prof button:hover{ border-color:var(--ocre); background:rgba(201,145,63,.08); }
+.prof svg{ color:var(--ocre); flex:0 0 auto; }
+.prof b{ display:block; font:600 .78rem/1.2 var(--sans); color:var(--bone); }
+.prof span{ display:block; font:400 .72rem/1.3 var(--sans); color:var(--on-ink-dim); margin-top:.15rem; }
+
+/* ══════════ 5. LEITURA EM VOZ ALTA — barra de controle ══════════ */
+.tts{
+  position:fixed; left:50%; bottom:1.4rem; transform:translate(-50%,150%); z-index:670;
+  display:flex; align-items:center; gap:.5rem; padding:.6rem .7rem; border-radius:3px;
+  background:var(--ink-2); border:1px solid rgba(237,229,214,.2);
+  box-shadow:0 16px 44px rgba(0,0,0,.5); transition:transform .45s var(--e);
+  max-width:min(94vw,520px);
+}
+.tts.is-on{ transform:translate(-50%,0); }
+.tts__b{
+  display:grid; place-items:center; width:34px; height:34px; border-radius:2px;
+  border:1px solid rgba(237,229,214,.18); color:var(--bone); flex:0 0 auto;
+  transition:background .25s, border-color .25s, color .25s;
+}
+.tts__b:hover{ background:rgba(201,145,63,.14); border-color:var(--ocre); color:var(--ocre-2); }
+.tts__st{
+  font:500 .7rem/1.3 var(--sans); color:var(--on-ink-dim); padding-inline:.4rem;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0;
+}
+.tts__rate{
+  font:600 .66rem/1 var(--sans); color:var(--ocre-2); border:1px solid rgba(237,229,214,.18);
+  border-radius:2px; padding:.5rem .55rem; flex:0 0 auto; font-variant-numeric:tabular-nums;
+}
+@media (max-width:560px){ .tts__st{ display:none; } }
+
+/* alvo clicável quando o modo leitura está ativo */
+html.a-tts [data-read]{ cursor:pointer; border-radius:2px; transition:background .25s, box-shadow .25s; }
+html.a-tts [data-read]:hover{ background:rgba(201,145,63,.1); box-shadow:0 0 0 4px rgba(201,145,63,.1); }
+html.a-tts .sec--bone [data-read]:hover{ background:rgba(138,100,40,.12); box-shadow:0 0 0 4px rgba(138,100,40,.1); }
+[data-read].is-speaking{
+  background:rgba(201,145,63,.18) !important;
+  box-shadow:0 0 0 5px rgba(201,145,63,.18), inset 3px 0 0 var(--ocre) !important;
+}
+.sec--bone [data-read].is-speaking{ background:rgba(201,145,63,.24) !important; }
+
+/* ══════════ 6. RÉGUA E MÁSCARA DE LEITURA ══════════ */
+.a11y-ruler{
+  position:fixed; left:0; right:0; z-index:610; pointer-events:none; display:none;
+  height:0; border-top:2px solid rgba(224,178,92,.85); border-bottom:2px solid rgba(224,178,92,.85);
+  box-shadow:0 0 22px rgba(224,178,92,.28);
+}
+html.a-ruler .a11y-ruler{ display:block; height:2.1em; }
+
+.a11y-mask{ position:fixed; inset:0; z-index:605; pointer-events:none; display:none; }
+html.a-mask .a11y-mask{ display:block; }
+.a11y-mask i{ position:absolute; left:0; right:0; background:rgba(8,6,4,.72); }
+.a11y-mask i:first-child{ top:0; }
+.a11y-mask i:last-child{ bottom:0; }
+
+/* ══════════ 7. EFEITOS DESLIGADOS ══════════ */
+html.a-nofx *,html.a-nofx *::before,html.a-nofx *::after{
+  animation-duration:.001ms !important; animation-iteration-count:1 !important;
+  transition-duration:.001ms !important; scroll-behavior:auto !important;
+}
+html.a-nofx .rev,html.a-nofx .split .w>i,html.a-nofx .mask i{ opacity:1 !important; transform:none !important; }
+html.a-nofx .plate__media{ clip-path:none !important; }
+html.a-nofx .cursor,html.a-nofx .grain,html.a-nofx .cue__l::after{ display:none !important; }
+html.a-nofx .hero__media img{ transform:scale(1.02) !important; }
+html.a-nofx [data-parallax]{ transform:none !important; }
+html.a-nofx .divider__rule{ transform:scaleX(1) !important; }
+
+/* ══════════ 8. ESCALA DO TEXTO ══════════ */
+html.a-txt1{ font-size:112.5%; }
+html.a-txt2{ font-size:125%; }
+html.a-txt3{ font-size:143.75%; }
+
+/* ══════════ 9. ESPAÇAMENTO (WCAG 1.4.12) ══════════ */
+html.a-spacing body{ letter-spacing:.075em; word-spacing:.14em; }
+html.a-spacing p,html.a-spacing li,html.a-spacing dd,html.a-spacing .q__t,
+html.a-spacing .lead,html.a-spacing .head__sub,html.a-spacing .ficha__c p{
+  line-height:1.85 !important;
+}
+html.a-spacing .prose p+p,html.a-spacing .cols__main>p+p{ margin-top:2em !important; }
+html.a-spacing .h1,html.a-spacing .h2,html.a-spacing .h3,
+html.a-spacing .hero__title,html.a-spacing .close__q,html.a-spacing .pull p{
+  letter-spacing:normal; line-height:1.22 !important;
+}
+
+/* ══════════ 10. ALTA LEGIBILIDADE ══════════ */
+html.a-legible{
+  --disp:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --serif:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --sans:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+}
+html.a-legible .h1,html.a-legible .h2,html.a-legible .h3,
+html.a-legible .hero__title,html.a-legible .close__q,html.a-legible .pull p,
+html.a-legible .dim__ttl,html.a-legible .foot__brand,html.a-legible .a11y__hd h2{
+  font-variation-settings:normal; font-weight:700; letter-spacing:-.01em;
+}
+html.a-legible .divider__num{ font-weight:700; }
+html.a-legible .dropcap{ font-weight:700; }
+html.a-legible em,html.a-legible .divider__sub,html.a-legible .plate__cap span{ font-style:normal; font-weight:700; }
+
+/* ══════════ 11. ALTO CONTRASTE ══════════ */
+html.a-hc{
+  --ink:#000000; --ink-2:#0A0A0A; --ink-3:#141414;
+  --bone:#FFFFFF; --bone-2:#FFFFFF; --bone-3:#F2ECE0;
+  --ocre:#FFC65C; --ocre-2:#FFD98A; --ocre-dim:#6B4A00;
+  --on-ink:#FFFFFF; --on-ink-dim:#E6DFD2;
+  --on-bone:#000000; --on-bone-dim:#1F1A12;
+}
+html.a-hc .sec--bone{ background:#FFFFFF; color:#000; }
+html.a-hc .sec--ink,html.a-hc .divider,html.a-hc .close,html.a-hc .plate,html.a-hc body{ background:#000; }
+html.a-hc .sec--bone .cols__main>p:not(.lead),html.a-hc .dim__in p,html.a-hc .facts dd{ color:#141414; }
+html.a-hc .sec--ink .prose p,html.a-hc .ficha__c p,html.a-hc .hero__sub{ color:#F2ECE0; }
+html.a-hc .hero__veil{
+  background:linear-gradient(180deg,rgba(0,0,0,.72) 0%,rgba(0,0,0,.5) 40%,rgba(0,0,0,.9) 100%);
+}
+html.a-hc .q,html.a-hc .ficha__c,html.a-hc .callout,html.a-hc .rt__i,html.a-hc .seg button,
+html.a-hc .btn--ghost,html.a-hc .icb,html.a-hc .a11y-open,html.a-hc .chips li{ border-color:currentColor; }
+html.a-hc .grain{ display:none; }
+/* a barra de navegação flutua sobre seções claras e escuras: em alto contraste
+   ela precisa de fundo sólido próprio, senão o texto some sobre o branco */
+html.a-hc .nav{
+  background:#000 !important; border-bottom:1px solid #FFF;
+  backdrop-filter:none !important; -webkit-backdrop-filter:none !important;
+}
+html.a-hc .nav__links a{ color:#F2ECE0; }
+html.a-hc .nav__links a.is-on{ color:#FFD98A; }
+/* marcador da aba ativa fica sobre fundo claro — usa o ocre escuro */
+html.a-hc .tl__ind{ background:#6B4A00; }
+html.a-hc .tl__tab.is-on{ color:#6B4A00; }
+html.a-hc :focus-visible{ outline:4px solid #FFD98A; outline-offset:3px; }
+html.a-hc .close__bg img,html.a-hc .hero__media img{ filter:contrast(1.1) brightness(.7); }
+
+/* ══════════ 12. LINKS SUBLINHADOS ══════════ */
+html.a-underline main a:not(.btn),html.a-underline .foot__nav a,html.a-underline .lnk{
+  text-decoration:underline; text-decoration-thickness:1.5px; text-underline-offset:3px;
+}
+html.a-underline .cue{ text-decoration:none; }
+
+/* ══════════ 13. CURSOR AMPLIADO ══════════ */
+html.a-bigcursor,html.a-bigcursor *{
+  cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath d='M8 4 L8 38 L17 29 L23 43 L29 40 L23 27 L36 27 Z' fill='%23fff' stroke='%23000' stroke-width='2.5' stroke-linejoin='round'/%3E%3C/svg%3E") 6 3, auto !important;
+}
+html.a-bigcursor a,html.a-bigcursor button,html.a-bigcursor [role="button"],html.a-bigcursor label,
+html.a-bigcursor input,html.a-bigcursor textarea,html.a-bigcursor summary{
+  cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath d='M18 4 C15 4 14 6 14 9 L14 24 L12 21 C10 18 7 18 5 20 C3 22 3 24 5 27 L13 40 C15 43 17 44 21 44 L32 44 C36 44 39 41 39 37 L39 20 C39 17 37 16 35 16 C33 16 32 17 32 19 L32 15 C32 12 30 11 28 11 C26 11 25 12 25 14 L25 11 C25 8 23 7 21 7 C19 7 18 8 18 10 Z' fill='%23fff' stroke='%23000' stroke-width='2.5' stroke-linejoin='round'/%3E%3C/svg%3E") 14 3, pointer !important;
+}
+html.a-bigcursor .cursor{ display:none !important; }
+
+/* ══════════ 14. FOCO REFORÇADO ══════════ */
+html.a-focus :focus-visible{
+  outline:3px solid var(--ocre-2) !important; outline-offset:3px !important;
+  box-shadow:0 0 0 7px rgba(224,178,92,.28) !important; border-radius:2px;
+}
+
+/* ══════════ 15. DALTONISMO (correção) ══════════ */
+/* O filtro vai em cada filho direto do body: aplicá-lo em html/body criaria
+   um containing block novo e quebraria todo position:fixed da página. */
+html.cb-protan body>*{ filter:url(#cb-protan); }
+html.cb-deutan body>*{ filter:url(#cb-deutan); }
+html.cb-tritan body>*{ filter:url(#cb-tritan); }
+html.cb-acromat body>*{ filter:url(#cb-acromat); }
+html[class*="cb-"] body>svg.a11y-filters{ filter:none; }
+
+/* ══════════ 16. VLIBRAS ══════════ */
+div[vw]{ z-index:640 !important; }
+html:not(.a-libras) div[vw]{ display:none !important; }
+.a11y-note{
+  margin-top:.6rem; padding:.6rem .7rem; border-radius:2px;
+  background:rgba(201,145,63,.1); border:1px solid rgba(201,145,63,.3);
+  font:400 .74rem/1.4 var(--sans); color:var(--bone-3);
+}
+
+/* ══════════ 17. ATALHOS ══════════ */
+.a11y-keys{ display:grid; gap:.4rem; }
+.a11y-keys div{ display:flex; align-items:baseline; gap:.6rem; font:400 .76rem/1.4 var(--sans); color:var(--on-ink-dim); }
+.a11y-keys kbd{
+  font:600 .68rem/1 var(--sans); padding:.3rem .42rem; border-radius:3px; flex:0 0 auto;
+  background:rgba(237,229,214,.1); border:1px solid rgba(237,229,214,.2); color:var(--bone);
+}
+
+/* ══════════ 18. IMPRESSÃO ══════════ */
+@media print{
+  .a11y,.a11y-open,.tts,.a11y-ruler,.a11y-mask,div[vw],.a11y-filters{ display:none !important; }
+  html[class*="cb-"] body>*{ filter:none !important; }
+}
